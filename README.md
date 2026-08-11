@@ -126,3 +126,58 @@ sequenceDiagram
 
 ```text
 [① 충돌 없는 협업]
+
+A 작업
+  ↓
+commit → push
+  ↓
+B fetch → merge
+  ↓
+B 작업
+  ↓
+commit → push
+  ↓
+A fetch → merge
+
+
+[② 충돌 발생]
+
+A와 B가 같은 파일의 같은 부분 수정
+  ↓
+A commit → push
+  ↓
+B commit → push
+  ↓
+Push 거절 (fetch first)
+
+
+[③ 충돌 해결]
+
+B git fetch origin
+  ↓
+git merge origin/main
+  ↓
+Merge Conflict 발생
+  ↓
+충돌 내용 직접 수정
+  ↓
+git add
+  ↓
+git commit
+  ↓
+Merge Commit 생성
+  ↓
+git push
+
+
+[④ 최종 동기화]
+
+A git fetch origin
+  ↓
+git merge origin/main
+  ↓
+A / B / GitHub
+동일한 최신 상태
+```
+
+> **핵심:** 같은 GitHub 저장소를 사용하더라도 각 작업자의 로컬 저장소는 서로 독립적으로 동작한다. 다른 작업자의 변경사항은 자동으로 내 로컬에 반영되지 않기 때문에 `fetch`와 `merge`를 통해 동기화해야 하며, 같은 파일의 같은 부분을 서로 다르게 수정한 경우 충돌을 직접 해결해야 한다.
